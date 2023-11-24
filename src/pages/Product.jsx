@@ -2,19 +2,23 @@ import React, { useContext, useEffect, useState } from "react";
 import FirebaseContext from "../contexts/FirebaseContext";
 import { doc, getDoc } from "firebase/firestore";
 import styled from "styled-components";
+import { useParams } from 'react-router-dom';
 
 const Product = () => {
     const { db } = useContext(FirebaseContext);
     const [product, setProduct] = useState({});
+    const { id } = useParams();
 
     const getDocument = async () => {
-        const docRef = doc(db, "productos", "cYlyuGiemLsDBGY9RcWr");
+        const docRef = doc(db, "productos", id);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
             setProduct(docSnap.data());
         }
     };
+
+    console.log(product, 'product!')
 
     useEffect(() => {
         getDocument();

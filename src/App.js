@@ -1,28 +1,25 @@
-import styled from 'styled-components';
+import Register from './pages/Register';
+import Login from './pages/Login';
 import Products from './pages/Products';
-import FirebaseProvider from './providers/FirebaseProvider';
+import Product from './pages/Product';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Layout from './pages/Layout';
 
 function App() {
   return (
-    <FirebaseProvider>
-      <Title>MOBILE STORE</Title>
-      <AppContainer data-testid="random">
-        <Products />
-      </AppContainer>
-    </FirebaseProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/products">
+            <Route index element={<Products />} />
+            <Route path=":id" element={<Product />} />
+          </Route>
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 };
-
-const AppContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 80vh;
-  width: 100vw;
-`;
-
-const Title = styled.h1`
-  text-align: center;
-`
 
 export default App;

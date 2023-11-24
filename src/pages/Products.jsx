@@ -3,6 +3,7 @@ import { collection, getDocs } from "firebase/firestore";
 import FirebaseContext from "../contexts/FirebaseContext";
 import styled from "styled-components";
 import { uniq } from 'lodash'
+import { useNavigate } from "react-router-dom";
 
 const Products = () => {
     const { db } = useContext(FirebaseContext);
@@ -10,12 +11,13 @@ const Products = () => {
     const [search, setSearch] = useState('');
     const [categories, setCategories] = useState([])
     const [checked, setChecked] = useState([]);
+    const navigate = useNavigate();
 
     const getAllProducts = async () => {
         const list = [];
         const querySnapshot = await getDocs(collection(db, "productos"));
         querySnapshot.forEach((doc) => {
-            list.push(doc.data())
+            list.push({ ...doc.data(), id: doc.id })
         });
 
         return list;
@@ -41,6 +43,10 @@ const Products = () => {
         }
     }
 
+    const goToProductDetail = (id) => {
+        navigate(`/products/${id}`);
+    }
+
     useEffect(() => {
         getAllProducts().then((list) => {
             setProducts(list)
@@ -48,6 +54,8 @@ const Products = () => {
             setCategories(cats);
         })
     }, [])
+
+    console.log(products, 'products!')
 
     useEffect(() => {
         if (checked.length) {
@@ -65,7 +73,7 @@ const Products = () => {
                     {categories.map((cat) => <li><input type="checkbox" onClick={(e) => onCheck(cat, e)} />{cat}</li>)}
                 </NestedMenu>
             </Menu>
-            {products.map(({ imageUrl, stock, name, price, type }) => <Product key={name}><img src={imageUrl} width={200} height={200} /><h1>{name}</h1><p>{stock} units left in stock</p><p>${price} USD</p><p>Categories: {type}</p></Product>)}
+            {products.map(({ id, imageUrl, stock, name, price, type }) => <Product key={name} onClick={() => goToProductDetail(id)}><img src={imageUrl} width={200} height={200} /><h1>{name}</h1><p>{stock} units left in stock</p><p>${price} USD</p><p>Categories: {type}</p></Product>)}
         </ProductsContainer>
     </Container>;
 }

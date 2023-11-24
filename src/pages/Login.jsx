@@ -2,11 +2,13 @@ import React, { useContext, useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import FirebaseContext from "../contexts/FirebaseContext";
 import styled from 'styled-components';
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const { auth } = useContext(FirebaseContext);
+    const navigate = useNavigate();
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
@@ -16,19 +18,20 @@ const Login = () => {
         setPassword(e.target.value);
     }
 
-    const loginUser = () => {
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                console.log(userCredential, 'loginUser!')
-            })
-            .catch((error) => { });
+    const loginUser = async () => {
+        const { user } = await signInWithEmailAndPassword(auth, email, password);
+        const token = await user.getIdToken();
+        console.log({ token, user }, 'loginUser!');
+        if (token) {
+            navigate("/products");
+        }
     }
 
     return <Container>
         <StyledInput placeholder="Email" value={email} onChange={handleEmailChange} />
         <StyledInput placeholder="Password" type="password" value={password} onChange={handlePasswordChange} />
         <StyledButton onClick={loginUser}>Sign in</StyledButton>
-        <p>Not an user? <StyledLink>Register</StyledLink></p>
+        <p>Not an user? <StyledLink to="/">Register</StyledLink></p>
     </Container>
 };
 
@@ -53,7 +56,7 @@ const StyledButton = styled.button`
     cursor: pointer;
 `;
 
-const StyledLink = styled.a`
+const StyledLink = styled(Link)`
     text-decoration: underline;
     color: blue;
     cursor: pointer;
