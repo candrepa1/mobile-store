@@ -1,14 +1,17 @@
 import FirebaseProvider from "../providers/FirebaseProvider";
 import styled from 'styled-components';
 import { Outlet } from "react-router-dom";
+import CartProvider from "../providers/CartProvider";
 
 const Layout = () => {
-    return <FirebaseProvider>
-        <Title>MOBILE STORE</Title>
-        <AppContainer>
-            <Outlet />
-        </AppContainer>
-    </FirebaseProvider>
+  return <FirebaseProvider>
+    <CartProvider>
+      <Title>MOBILE STORE</Title>
+      <AppContainer>
+        <Outlet />
+      </AppContainer>
+    </CartProvider>
+  </FirebaseProvider>
 };
 
 const AppContainer = styled.div`
@@ -16,11 +19,13 @@ const AppContainer = styled.div`
   align-items: center;
   justify-content: center;
   height: 80vh;
-  width: 100vw;
+  width: 90vw;
+  margint-top: 100px;
 `;
 
 const Title = styled.h1`
   text-align: center;
+  height: 10vh;
 `
 
 export default Layout;

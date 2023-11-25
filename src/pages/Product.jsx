@@ -3,11 +3,16 @@ import FirebaseContext from "../contexts/FirebaseContext";
 import { doc, getDoc } from "firebase/firestore";
 import styled from "styled-components";
 import { useParams } from 'react-router-dom';
+import CartContext from "../contexts/CartContext";
+import { useNavigate } from "react-router-dom";
 
 const Product = () => {
     const { db } = useContext(FirebaseContext);
     const [product, setProduct] = useState({});
+    const [quantity, setQuantity] = useState(1);
+    const { addToBag } = useContext(CartContext);
     const { id } = useParams();
+    const navigate = useNavigate();
 
     const getDocument = async () => {
         const docRef = doc(db, "productos", id);
@@ -18,7 +23,19 @@ const Product = () => {
         }
     };
 
-    console.log(product, 'product!')
+    const changeQuantity = (e) => {
+        setQuantity(Number(e.target.value));
+    }
+
+    const addProduct = () => {
+        addToBag({
+            [product.name]: {
+                quantity,
+                imageUrl: product.imageUrl,
+                price: product.price,
+            }
+        })
+    };
 
     useEffect(() => {
         getDocument();
@@ -31,14 +48,26 @@ const Product = () => {
         </TitleContainer>
         <DescriptionContainer>
             <CartContainer>
-                <AddToCart>Add to cart</AddToCart>
+                <div>
+                    <input type="number" min="1" max={product.stock} value={quantity} onChange={changeQuantity} />
+                    <AddToCart onClick={addProduct}>Add to cart</AddToCart>
+                </div>
                 <StyledPrice>${product.price} USD</StyledPrice>
             </CartContainer>
             <p>{product.stock} units left in stock</p>
             <p>{product.description}</p>
         </DescriptionContainer>
+        <Cart onClick={() => navigate('/cart')}>CART</Cart>
     </Container>;
 }
+
+const Cart = styled.button`
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 70px;
+    height: 50px;
+`;
 
 const CartContainer = styled.div`
     display: flex;
@@ -53,6 +82,7 @@ const AddToCart = styled.button`
     background-color: #deca14;
     font-size: 20px;
     cursor: pointer;
+    margin-left: 20px;
 `;
 
 const StyledPrice = styled.h2`
