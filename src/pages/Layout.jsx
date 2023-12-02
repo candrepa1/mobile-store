@@ -1,31 +1,31 @@
 import FirebaseProvider from "../providers/FirebaseProvider";
-import styled from 'styled-components';
 import { Outlet } from "react-router-dom";
 import CartProvider from "../providers/CartProvider";
+import Logo from '../assets/logo.png';
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBagShopping, faUser } from '@fortawesome/free-solid-svg-icons'
 
 const Layout = () => {
   return <FirebaseProvider>
     <CartProvider>
-      <Title>MOBILE STORE</Title>
-      <AppContainer>
-        <Outlet />
-      </AppContainer>
+      <section id="header">
+        <img src={Logo} />
+        <ul id="navbar">
+          <li><Link to="/" className="active">Home</Link></li>
+          <li><Link to="/products">Shop</Link></li>
+          <li>
+            <Link to="/login"><FontAwesomeIcon icon={faUser} fontSize={30} /></Link>
+          </li>
+          <li>
+            <Link to="/cart"><FontAwesomeIcon icon={faBagShopping} fontSize={30} /></Link>
+            <span class="quantity">0</span>
+          </li>
+        </ul>
+      </section>
+      <Outlet />
     </CartProvider>
   </FirebaseProvider>
 };
-
-const AppContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 80vh;
-  width: 90vw;
-  margint-top: 100px;
-`;
-
-const Title = styled.h1`
-  text-align: center;
-  height: 10vh;
-`
 
 export default Layout;
