@@ -14,12 +14,13 @@ const Products = () => {
     const [isFiltering, setIsFiltering] = useState(false);
     const navigate = useNavigate();
     const fuse = new Fuse(products, {
-        keys: ['name']
+        keys: ['name'],
     })
 
     const getAllProducts = async () => {
         const list = [];
         const querySnapshot = await getDocs(collection(db, "productos"));
+        console.log(querySnapshot, 'querySnapshot!')
         querySnapshot.forEach((doc) => {
             list.push({ ...doc.data(), id: doc.id })
         });
@@ -30,9 +31,9 @@ const Products = () => {
     const onSearch = (e) => {
         if (e.keyCode === 13) {
             setIsFiltering(true);
-            const filteredProducts = fuse.search(search)[0].item;
-            const list = [filteredProducts];
-            setProducts(list);
+            const filteredProducts = fuse.search(search);
+            const formattedProducts = filteredProducts.map(({ item }) => item);
+            setProducts(formattedProducts);
         }
     };
 
@@ -41,8 +42,9 @@ const Products = () => {
         setIsFiltering(false);
     }
 
-    const onSelect = (e) => {
-        setCategorySelected(e.target.value)
+    const onSelect = (cat) => {
+        setIsFiltering(true);
+        setCategorySelected(cat);
     }
 
     const goToProductDetail = (id) => {
@@ -61,15 +63,16 @@ const Products = () => {
 
     useEffect(() => {
         if (categorySelected) {
-            setIsFiltering(true);
-            const filteredProducts = products.filter(({ type }) => type === categorySelected);
-            setProducts(filteredProducts)
-            const cats = getCategories(filteredProducts);
-            setCategories(cats);
+            getAllProducts().then((list) => {
+                const filteredProducts = list.filter(({ type }) => type === categorySelected);
+                setProducts(filteredProducts)
+            })
         } else {
             setIsFiltering(false);
         }
     }, [categorySelected])
+
+    console.log(products, 'twice!')
 
     return <div id="products">
         <div id="menu">
@@ -78,8 +81,9 @@ const Products = () => {
                 <div class="sidebar">
                     <h3 class="sidebar-title">Explore</h3>
                     <ul>
-                        {categories.map((cat) => <li onChange={onSelect}>{cat}</li>)}
+                        {categories.map((cat) => <li className={categorySelected === cat ? 'active' : ''} onClick={() => onSelect(cat)}>{cat}</li>)}
                     </ul>
+                    <button className="button-special" onClick={() => setCategorySelected('')}>Clear filters</button>
                 </div>
             </div>
         </div>

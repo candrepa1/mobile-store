@@ -1,31 +1,34 @@
-import FirebaseProvider from "../providers/FirebaseProvider";
+
+import { useContext } from 'react';
 import { Outlet } from "react-router-dom";
-import CartProvider from "../providers/CartProvider";
 import Logo from '../assets/logo.png';
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBagShopping, faUser } from '@fortawesome/free-solid-svg-icons'
+import CartContext from '../contexts/CartContext';
+import { useLocation } from 'react-router-dom';
 
 const Layout = () => {
-  return <FirebaseProvider>
-    <CartProvider>
-      <section id="header">
-        <img src={Logo} />
-        <ul id="navbar">
-          <li><Link to="/" className="active">Home</Link></li>
-          <li><Link to="/products">Shop</Link></li>
-          <li>
-            <Link to="/login"><FontAwesomeIcon icon={faUser} fontSize={30} /></Link>
-          </li>
-          <li>
-            <Link to="/cart"><FontAwesomeIcon icon={faBagShopping} fontSize={30} /></Link>
-            <span class="quantity">0</span>
-          </li>
-        </ul>
-      </section>
-      <Outlet />
-    </CartProvider>
-  </FirebaseProvider>
+  const { count } = useContext(CartContext);
+  const { pathname } = useLocation();
+
+  return <><section id="header">
+    <img src={Logo} />
+    <ul id="navbar">
+      <li><Link to="/" className={pathname === '/' ? "active" : ''}>Home</Link></li>
+      <li><Link to="/products" className={pathname === '/products' ? "active" : ''}>Shop</Link></li>
+      <li>
+        <Link to="/login" className={pathname === '/login' ? "active" : ''}><FontAwesomeIcon icon={faUser} fontSize={30} /></Link>
+      </li>
+      <li>
+        <Link to="/cart" className={pathname === '/cart' ? "active" : ''}><FontAwesomeIcon icon={faBagShopping} fontSize={30} /></Link>
+        <span class="quantity">{count}</span>
+      </li>
+    </ul>
+  </section>
+    <Outlet />
+  </>
+
 };
 
 export default Layout;

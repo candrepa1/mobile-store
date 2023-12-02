@@ -3,6 +3,7 @@ import CartContext from "../contexts/CartContext";
 
 const CartProvider = ({ children }) => {
     const [products, setProducts] = useState({});
+    const [count, setCount] = useState(0)
 
     const addToBag = (toAdd) => {
         const initialNames = Object.keys(products);
@@ -18,12 +19,22 @@ const CartProvider = ({ children }) => {
         alreadyAdded.forEach((item) => {
             finalProducts[item].quantity = products.item.quantity + toAdd.item.quantity;
         });
-        setProducts({ ...finalProducts, ...toAdd });
+        const endProducts = { ...finalProducts, ...toAdd };
+        setProducts(endProducts);
+        const names = Object.keys(endProducts);
+        const finalCount = names.reduce((final, item) => final + endProducts[item].quantity, 0)
+        if (finalCount) {
+            setCount(finalCount)
+        }
     }
 
-    console.log(products, 'CartProvider!')
+    const removeFromBag = (toRemove) => {
+        const newProducts = { ...products };
+        delete newProducts[toRemove];
+        setProducts(newProducts)
+    }
 
-    return <CartContext.Provider value={{ products, addToBag }}>
+    return <CartContext.Provider value={{ products, addToBag, count, removeFromBag }}>
         {children}
     </CartContext.Provider>
 }

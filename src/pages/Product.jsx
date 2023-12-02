@@ -32,6 +32,7 @@ const Product = () => {
                 quantity,
                 imageUrl: product.imageUrl,
                 price: product.price,
+                stock: product.stock,
             }
         })
     };
