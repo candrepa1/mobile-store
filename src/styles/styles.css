@@ -58,7 +58,8 @@ body {
 
 /* done */
 #header {
-    position: fixed;
+    position: sticky;
+    top: 0px;
     width: 100%;
     overflow: hidden;
     z-index: 100;
@@ -139,17 +140,14 @@ body {
 
 /* done */
 #hero {
-    height: 100vh;
+    height: 80vh;
     width: 100%;
-    background-size: cover;
-    background-position: top 25% right 0;
     padding: 0 80px;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     line-height: 1;
-
 }
 
 #hero .first-div {
@@ -593,4 +591,209 @@ footer .install img {
 footer .copyright {
     width: 100%;
     text-align: center
+}
+
+#products {
+    width: 100%;
+    background-size: cover;
+    background-position: top 25% right 0;
+    padding: 30px 80px;
+    display: flex;
+    flex-direction: row;
+    line-height: 1;
+}
+
+#menu {
+    background-size: cover;
+    background-position: top 25% right 0;
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+    margin-right: 80px;
+}
+
+#menu input {
+    margin-bottom: 20px;
+}
+
+.sidebar {
+    height: 100%;
+}
+
+.sidebar .sidebar-title {
+    font-weight: 700;
+    margin-bottom: 1em;
+}
+
+.sidebar ul {
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    list-style-type: none;
+    margin-bottom: 0.5em;
+    cursor: pointer;
+    position: relative;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.sidebar ul li a {
+    color: #444;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 12px;
+
+
+    display: flex;
+    padding: 0.25em 2em 0.25em 0.5em;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sidebar ul li a:hover {
+    background: #eaeaea;
+}
+
+.sidebar ul li a span {
+    margin-right: 10px;
+    font-size: 16px;
+
+    float: left;
+}
+
+.sidebar ul li::before {
+    content: "";
+    width: 0;
+    height: 100%;
+    background-color: #8ec5fc;
+    background-image: linear-gradient(62deg, #8ec5fc 0%, #e0c3fc 100%);
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: all 0.2s linear;
+}
+
+.sidebar ul li:hover,
+.sidebar ul li::before {
+    width: 10px;
+}
+
+#special-h1 {
+    font-size: 20px;
+    line-height: 24px;
+    color: #222;
+}
+
+#products-grid {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+#products-grid div {
+    width: 300px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 5px 15px;
+    box-shadow: 20px 20px 34px rgba(0, 0, 0, 0.03);
+    border: 1px solid #cce7d0;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+.home {
+    overflow: hidden;
+}
+
+.home__container {
+    height: calc(100vh - 6rem);
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.home__data {
+    margin-right: 100px;
+}
+
+.home__sneaker {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+}
+
+.home__img {
+    top: 1.5rem;
+    max-width: initial;
+    width: 275px;
+    transform: rotate(-30deg);
+}
+
+.home__new {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.home__title {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    width: 400px;
+    break-after: always;
+    line-height: 30px;
+}
+
+.home__description {
+    width: 500px;
+}
+
+.button-special {
+    display: inline-block;
+    background-color: #141414;
+    color: #fff;
+    padding: 1.125rem 2rem;
+    border-radius: 0.5rem;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.button-special:hover {
+    transform: translateY(-0.25rem);
+}
+
+#login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 6rem);
+    width: 100%;
+}
+
+.input-login {
+    height: 30px;
+    margin-bottom: 20px;
+    width: 300px;
+}
+
+.button-login {
+    color: #000;
+    padding: 15px 30px;
+    font-weight: 400;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #fff;
+    outline: none;
+    transition: 0.2s;
+    cursor: pointer
 }

@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import FirebaseContext from "../contexts/FirebaseContext";
-import styled from "styled-components";
 import { uniq } from 'lodash'
 import { useNavigate } from "react-router-dom";
 import Fuse from 'fuse.js';
@@ -11,7 +10,7 @@ const Products = () => {
     const [products, setProducts] = useState([]);
     const [search, setSearch] = useState('');
     const [categories, setCategories] = useState([])
-    const [checked, setChecked] = useState([]);
+    const [categorySelected, setCategorySelected] = useState('');
     const [isFiltering, setIsFiltering] = useState(false);
     const navigate = useNavigate();
     const fuse = new Fuse(products, {
@@ -42,13 +41,8 @@ const Products = () => {
         setIsFiltering(false);
     }
 
-    const onCheck = (cat, e) => {
-        if (e.target.checked) {
-            setChecked((prev) => [...prev, cat])
-        } else {
-            const filteredCats = checked.filter((prevCat) => prevCat != cat);
-            setChecked(filteredCats);
-        }
+    const onSelect = (e) => {
+        setCategorySelected(e.target.value)
     }
 
     const goToProductDetail = (id) => {
@@ -66,76 +60,41 @@ const Products = () => {
     }, [isFiltering])
 
     useEffect(() => {
-        if (checked.length) {
+        if (categorySelected) {
             setIsFiltering(true);
-            const filteredProducts = products.filter(({ type }) => checked.includes(type));
+            const filteredProducts = products.filter(({ type }) => type === categorySelected);
             setProducts(filteredProducts)
             const cats = getCategories(filteredProducts);
             setCategories(cats);
         } else {
             setIsFiltering(false);
         }
-    }, [checked.length])
+    }, [categorySelected])
 
-    return <Container>
-        <input placeholder="Search product..." onChange={onChangeInput} value={search} onKeyUp={onSearch} />
-        <ProductsContainer>
-            <Menu>
-                <BoldElement>Categories</BoldElement>
-                <NestedMenu>
-                    {categories.map((cat) => <li><input type="checkbox" onChange={(e) => onCheck(cat, e)} checked={isChecked(checked, cat)} />{cat}</li>)}
-                </NestedMenu>
-            </Menu>
-            <StyledProducts>{products.map(({ id, imageUrl, stock, name, price, type }) => <Product key={name} onClick={() => goToProductDetail(id)}><img src={imageUrl} width={200} height={200} /><h1>{name}</h1><p>{stock} units left in stock</p><p>${price} USD</p><p>Categories: {type}</p></Product>)}</StyledProducts>
-        </ProductsContainer>
-        <Cart onClick={() => navigate('/cart')}>CART</Cart>
-    </Container>;
+    return <div id="products">
+        <div id="menu">
+            <input placeholder="Search product..." onChange={onChangeInput} value={search} onKeyUp={onSearch} />
+            <div>
+                <div class="sidebar">
+                    <h3 class="sidebar-title">Explore</h3>
+                    <ul>
+                        {categories.map((cat) => <li onChange={onSelect}>{cat}</li>)}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="products-grid">
+            {products.map(({ id, imageUrl, stock, name, price, type }) => <div key={name} onClick={() => goToProductDetail(id)}>
+                <img src={imageUrl} width={150} height={150} />
+                <h1 id="special-h1">{name}</h1>
+                <p>{stock} units left in stock</p>
+                <p>${price} USD</p>
+                <p>Categories: {type}</p>
+            </div>)}
+        </div>
+    </div>;
 };
 
-const isChecked = (list, cat) => list.includes(cat);
-
 const getCategories = (list) => uniq(list.map(({ type }) => type));
-
-const Cart = styled.button`
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 70px;
-    height: 50px;
-`;
-
-const StyledProducts = styled.div`
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(7, 1fr);
-    height: 100vh;
-`;
-
-const Menu = styled.ul`
-    list-style-type: none;
-    padding: 0;
-`;
-
-const NestedMenu = styled.ul`
-    list-style-type: none;
-`;
-
-const BoldElement = styled.li`
-    font-weight: bold;
-`;
-
-const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-`;
-
-const Product = styled.div`
-    margin: 15px;
-`;
-
-const ProductsContainer = styled.div`
-    display: flex;
-    margin: 30px;
-`;
 
 export default Products;
