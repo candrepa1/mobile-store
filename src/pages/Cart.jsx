@@ -19,8 +19,6 @@ const Cart = () => {
         setTotal(totalPrice);
     }, [products])
 
-    console.log(products, 'products!')
-
     return <>
         {total ? <div id="main-heading">
             <div class="heading cf">

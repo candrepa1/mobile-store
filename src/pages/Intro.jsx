@@ -3,10 +3,6 @@ import { useNavigate } from "react-router-dom";
 const Intro = () => {
     const navigate = useNavigate();
 
-    const goToProducts = () => {
-        navigate(`/products`);
-    }
-
     return <>
         <div id="hero">
             <div className="first-div">
@@ -14,7 +10,7 @@ const Intro = () => {
                 <h2>Super value deals</h2>
                 <h1>On all Products</h1>
                 <p>Save more with coupons and up to 70% off!</p>
-                <button onClick={goToProducts}>Shop Now</button>
+                <button onClick={() => navigate(`/products`)}>Shop Now</button>
             </div>
             <div id="feature" class="section-p1">
                 <div className="fe-box">

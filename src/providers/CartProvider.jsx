@@ -23,15 +23,16 @@ const CartProvider = ({ children }) => {
         setProducts(endProducts);
         const names = Object.keys(endProducts);
         const finalCount = names.reduce((final, item) => final + endProducts[item].quantity, 0)
-        if (finalCount) {
-            setCount(finalCount)
-        }
+        setCount(finalCount)
     }
 
     const removeFromBag = (toRemove) => {
         const newProducts = { ...products };
         delete newProducts[toRemove];
         setProducts(newProducts)
+        const names = Object.keys(newProducts);
+        const finalCount = names.reduce((final, item) => final + newProducts[item].quantity, 0)
+        setCount(finalCount)
     }
 
     return <CartContext.Provider value={{ products, addToBag, count, removeFromBag }}>

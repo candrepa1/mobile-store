@@ -3,7 +3,6 @@ import FirebaseContext from "../contexts/FirebaseContext";
 import { doc, getDoc } from "firebase/firestore";
 import { useParams } from 'react-router-dom';
 import CartContext from "../contexts/CartContext";
-import { useNavigate } from "react-router-dom";
 
 const Product = () => {
     const { db } = useContext(FirebaseContext);
@@ -11,7 +10,6 @@ const Product = () => {
     const [quantity, setQuantity] = useState(1);
     const { addToBag } = useContext(CartContext);
     const { id } = useParams();
-    const navigate = useNavigate();
 
     const getDocument = async () => {
         const docRef = doc(db, "productos", id);

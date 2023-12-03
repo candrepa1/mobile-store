@@ -2,12 +2,14 @@ import React, { useContext, useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import FirebaseContext from "../contexts/FirebaseContext";
 import { Link, useNavigate } from "react-router-dom";
+import UserContext from "../contexts/UserContext";
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(false)
     const { auth } = useContext(FirebaseContext);
+    const { setUser } = useContext(UserContext)
     const navigate = useNavigate();
 
     const handleEmailChange = (e) => {
@@ -24,6 +26,7 @@ const Login = () => {
             const token = await user.getIdToken();
             if (token) {
                 navigate("/products");
+                setUser({ token, email })
             }
         } catch {
             setError(true)

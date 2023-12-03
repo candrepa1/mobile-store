@@ -8,6 +8,7 @@ import Layout from './pages/Layout';
 import Intro from './pages/Intro';
 import Providers from './pages/Providers'
 import './styles/styles.css'
+import AuthGuard from './guards/AuthGuard';
 
 function App() {
   return (
@@ -18,11 +19,13 @@ function App() {
             <Route path="/" element={<Intro />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/products">
-              <Route index element={<Products />} />
-              <Route path=":id" element={<Product />} />
+            <Route element={<AuthGuard />}>
+              <Route path="/products">
+                <Route index element={<Products />} />
+                <Route path=":id" element={<Product />} />
+              </Route>
+              <Route path="/cart" element={<Cart />} />
             </Route>
-            <Route path="/cart" element={<Cart />} />
           </Route>
         </Route>
       </Routes>

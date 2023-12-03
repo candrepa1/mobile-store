@@ -20,7 +20,6 @@ const Products = () => {
     const getAllProducts = async () => {
         const list = [];
         const querySnapshot = await getDocs(collection(db, "productos"));
-        console.log(querySnapshot, 'querySnapshot!')
         querySnapshot.forEach((doc) => {
             list.push({ ...doc.data(), id: doc.id })
         });
@@ -71,8 +70,6 @@ const Products = () => {
             setIsFiltering(false);
         }
     }, [categorySelected])
-
-    console.log(products, 'twice!')
 
     return <div id="products">
         <div id="menu">
